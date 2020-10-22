@@ -64,7 +64,7 @@ export default defineComponent({
             const alert = await alertController
             .create({
                 cssClass: 'my-custom-class',
-                header: 'VisitApp',
+                header: 'Suburban Access',
                 subHeader: 'Estatus',
                 message: Mensaje,
                 buttons: ['OK'],

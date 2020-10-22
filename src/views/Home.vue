@@ -2,14 +2,14 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>VisitApp</ion-title>
+        <ion-title>Suburban Access</ion-title>
       </ion-toolbar>
     </ion-header>
     
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
-          <ion-title size="large">VisitApp</ion-title>
+          <ion-title size="large">Suburban Acces</ion-title>
         </ion-toolbar>
       </ion-header>
     </ion-content>
