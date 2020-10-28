@@ -1,6 +1,7 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
 import router from './router';
+import firebase from 'firebase';
 
 import { IonicVue } from '@ionic/vue';
 
@@ -23,10 +24,38 @@ import '@ionic/vue/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: 'AIzaSyCpDobHXQxo-7OQslYDUhknjaZYGZFhqCc',
+  authDomain: 'suburban-access-backend.firebaseapp.com',
+  databaseURL: 'https://suburban-access-backend.firebaseio.com',
+  projectId: 'suburban-access-backend',
+  storageBucket: 'suburban-access-backend.appspot.com',
+  messagingSenderId: '908760750004',
+  appId: '1:908760750004:web:0c7cc238841031170dc4e1',
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// let app = '' as any;
+
+// firebase.auth().onAuthStateChanged((user) => {
+//   console.log(user);
+//   if (!app) {
+//     app = createApp(App)
+//       .use(IonicVue)
+//       .use(router);
+
+//     router.isReady().then(() => {
+//       app.mount('#app');
+//     });
+//   }
+// });
+
 const app = createApp(App)
   .use(IonicVue)
   .use(router);
-  
+
 router.isReady().then(() => {
   app.mount('#app');
 });
