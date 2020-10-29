@@ -1,8 +1,11 @@
 <template>
   <ion-card>
+      
+    <img src="../../public/assets/icon/SA.png" />
+      
     <ion-item>
       <ion-label position="floating">User</ion-label>
-      <ion-input v-model="User.usuario"></ion-input>
+      <ion-input v-model="User.usuario" type="text"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Password</ion-label>

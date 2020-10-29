@@ -8,6 +8,7 @@
         <ion-title>Registro de Visita</ion-title>
       </ion-toolbar>
     </ion-header>
+    <ion-content :fullscreen="true">
     <div id="container">
       <div v-if="visits.length < 1">
         <p>No tienes registro de entradas</p>
@@ -22,6 +23,7 @@
         </ion-card-content>
       </ion-card>
     </div>
+    </ion-content>
   </ion-page>
 </template>
 
