@@ -19,9 +19,13 @@
           <ion-label>Registrar visita</ion-label>
         </ion-item>
     
-        <ion-item detail>
+        <ion-item detail v-on:click="bitacora">
           <ion-label>Bitacora de entradas</ion-label>
-        </ion-item>    
+        </ion-item>
+
+        <ion-item detail v-on:click="logout">
+          <ion-label>Cerrar sesión</ion-label>
+        </ion-item> 
       </ion-list>
     </div>
     
@@ -31,6 +35,8 @@
 <script lang="ts">
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel  } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 export default defineComponent({
   name: 'Home',
@@ -47,6 +53,17 @@ export default defineComponent({
   methods:{
     Registro(){
       this.$router.push('NuevaVisita')
+    },
+    bitacora() {
+      this.$router.push('/bitacoras');
+    },
+    async logout() {
+      try {
+        await firebase.auth().signOut();
+        await this.$router.push('/login');
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
