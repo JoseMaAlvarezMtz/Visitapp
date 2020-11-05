@@ -35,9 +35,14 @@ const routes: Array<RouteRecordRaw> = [
     meta: {requiresAuth: true}
   },
   {
-    path: '/genera',
+    path: '/generaqr/:visit',
     name: 'Generaqr',
+    meta: {requiresAuth: true},
     component: Generaqr
+  },
+  {
+    path: '/bitacoras',
+    name: 'Bitacoras',
     component: Bitacora,
     meta: {requiresAuth: true}
   },

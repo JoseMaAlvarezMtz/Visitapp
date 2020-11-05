@@ -13,13 +13,13 @@
       <div v-if="visits.length < 1">
         <p>No tienes registro de entradas</p>
       </div>
-      <ion-card v-for="(visit, index) in visits" :key="index">
+      <ion-card v-for="(visit, index) in visits" :key="index" >
         <ion-card-header>
-          <ion-card-title>{{ visit.name }} {{ visit.lastname }}</ion-card-title>
-          <ion-card-subtitle>{{ visit.plate }}</ion-card-subtitle>
+          <ion-card-title @click="VistaQr(visit.dataID)">{{ visit.data.name }} {{ visit.data.lastname }}</ion-card-title>
+          <ion-card-subtitle>{{ visit.data.plate }}</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          {{ visit.date }} - {{ visit.time }}
+          {{ visit.data.date }} - {{ visit.data.time }}
         </ion-card-content>
       </ion-card>
     </div>
@@ -34,11 +34,13 @@ import {
   IonCardContent,
   IonCardSubtitle,
   IonCardTitle,
+  IonCardHeader,
   IonHeader,
   IonToolbar,
   IonButtons,
   IonBackButton,
   IonTitle,
+  IonContent,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import firebase from 'firebase/app';
@@ -52,11 +54,13 @@ export default defineComponent({
     IonCardContent,
     IonCardSubtitle,
     IonCardTitle,
+    IonCardHeader,
     IonHeader,
     IonToolbar,
     IonButtons,
     IonBackButton,
     IonTitle,
+    IonContent,
   },
   data() {
     return {
@@ -64,6 +68,17 @@ export default defineComponent({
       userId: '',
     };
   },
+  methods: {
+    VistaQr(uid: any){
+      //const visitante = "nombre bien perron";
+      console.log(uid)
+      //console.log(this.visits)
+    this.$router.push({name:'Generaqr', params:{visit: uid},  });
+
+  },
+
+  },
+  
   async created() {
     await firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -80,11 +95,15 @@ export default defineComponent({
         .where('userId', '==', this.userId)
         .get();
       querySnapshot.forEach((doc) => {
-        this.visits.push(doc.data());
+        console.log(doc.id)
+        const dataID = doc.id
+        this.visits.push({data: doc.data(), dataID});
       });
+      console.log(this.visits)
     } catch (error) {
       console.log(error);
     }
+
   },
 });
 </script>

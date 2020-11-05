@@ -36,7 +36,7 @@
         </ion-item>
         <ion-item>
           <ion-label position="floating">Hora de acceso</ion-label>
-          <ion-datetime display-format="YYYY-MM-DD"></ion-datetime>
+          <ion-datetime display-format="HH-mm"></ion-datetime>
         </ion-item>
         <ion-button @click="newVisit">
           Registrar visita
