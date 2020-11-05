@@ -2,12 +2,10 @@
  <ion-page>
    <ion-card>
      <ion-input v-model="qrText" v-on:keyup.enter="generateQrCode">
-
      </ion-input>
      <ion-img :src="qrSrc"></ion-img>
    </ion-card>
  </ion-page>
-   
 </template>
 
 
