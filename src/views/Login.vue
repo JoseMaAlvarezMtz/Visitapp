@@ -1,8 +1,8 @@
 <template>
-  <ion-card>
-      
+  <ion-page>
+    <ion-card>
     <img src="../../public/assets/icon/SA.png" />
-      
+
     <ion-item>
       <ion-label position="floating">User</ion-label>
       <ion-input v-model="User.usuario" type="text"></ion-input>
@@ -15,10 +15,12 @@
       >Iniciar sesion</ion-button
     >
   </ion-card>
+  </ion-page>
 </template>
 
 <script lang="ts">
 import {
+  IonPage,
   IonCard,
   IonItem,
   IonLabel,
@@ -29,10 +31,12 @@ import {
 import { defineComponent } from 'vue';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/firestore';
 
 export default defineComponent({
   name: 'Login',
   components: {
+    IonPage,
     IonCard,
     IonItem,
     IonLabel,
@@ -81,7 +85,25 @@ export default defineComponent({
         await firebase
           .auth()
           .signInWithEmailAndPassword(this.User.usuario, this.User.contra);
-        await this.$router.push('Home');
+        firebase.auth().onAuthStateChanged(async(user) => {
+          if (user) {
+            const querySnapshot = await firebase
+              .firestore()
+              .collection('users_roles')
+              .where('userId', '==', user.uid)
+              .get();
+            querySnapshot.forEach(doc => {
+              if(doc.data().role === 'admin') {
+                this.$router.push('Admin');
+              } else {
+                this.$router.push('Home');
+              }
+            });
+          }
+        });
+        this.User.usuario = '';
+        this.User.contra = '';
+        // await this.$router.push('Home');
       } catch (error) {
         const status = error;
         return this.presentAlert(status);
