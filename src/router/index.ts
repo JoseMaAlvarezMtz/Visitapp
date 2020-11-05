@@ -38,6 +38,10 @@ const routes: Array<RouteRecordRaw> = [
     path: '/genera',
     name: 'Generaqr',
     component: Generaqr
+  },
+  {
+    path: '/bitacoras',
+    name: 'Bitacora',
     component: Bitacora,
     meta: {requiresAuth: true}
   },
