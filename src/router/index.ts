@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import NuevaVisita from '../views/NuevaVisita.vue'
 import Bitacora from '../views/Bitacora.vue'
+import Generaqr from '../views/Generaqr.vue'
 import Admin from '../views/Admin.vue';
 import Register from '../views/Register.vue';
 import VisitasAdmin from '../views/VisitasAdmin.vue'
@@ -34,8 +35,9 @@ const routes: Array<RouteRecordRaw> = [
     meta: {requiresAuth: true}
   },
   {
-    path: '/bitacoras',
-    name: 'Bitacora',
+    path: '/genera',
+    name: 'Generaqr',
+    component: Generaqr
     component: Bitacora,
     meta: {requiresAuth: true}
   },
