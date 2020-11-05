@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import NuevaVisita from '../views/NuevaVisita.vue'
 import Bitacora from '../views/Bitacora.vue'
+import Generaqr from '../views/Generaqr.vue'
 // import firebase from 'firebase/app';
 // import 'firebase/auth';
 
@@ -33,6 +34,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/bitacoras',
     name: 'Bitacora',
     component: Bitacora
+  },
+  {
+    path: '/genera',
+    name: 'Generaqr',
+    component: Generaqr
   }
 ]
 

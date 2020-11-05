@@ -32,11 +32,11 @@
         </ion-item>
         <ion-item>
           <ion-label position="floating">Fecha de acceso</ion-label>
-          <ion-input v-model="date" type="date"></ion-input>
+          <ion-datetime display-format="YYYY-MM-DD"></ion-datetime>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Hora de acceso</ion-label>
-          <ion-input v-model="time" type="time"></ion-input>
+          <ion-datetime display-format="YYYY-MM-DD"></ion-datetime>
         </ion-item>
         <ion-button @click="newVisit">
           Registrar visita
@@ -59,7 +59,8 @@ import {
   IonBackButton,
   IonButtons,
   IonInput,
-  IonButton
+  IonButton,
+  IonDatetime
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import firebase from 'firebase/app';
@@ -80,7 +81,8 @@ export default defineComponent({
     IonBackButton,
     IonButtons,
     IonInput,
-    IonButton
+    IonButton,
+    IonDatetime
   },
   data() {
     return {
