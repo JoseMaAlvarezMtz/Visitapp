@@ -1,31 +1,54 @@
 <template>
  <ion-page>
+   <ion-header :translucent="true">
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Compartir Qr</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content :fullscreen="true">
    <ion-card>
-     <ion-input v-model="qrText" v-on:keyup.enter="generateQrCode">
-
+     <ion-item>
+     <ion-label>{{visit}}</ion-label>
+     <ion-input v-model="qrText" @load="generateQrCode">
+       
      </ion-input>
+     </ion-item>
+     <ion-item>
      <ion-img :src="qrSrc"></ion-img>
+     </ion-item>
+     <ion-button @click="generateQrCode">Generar QR</ion-button>
    </ion-card>
+   </ion-content>
  </ion-page>
    
 </template>
 
 
 <script>
+import { defineComponent } from 'vue';
 import qrCode from 'qrcode'
-import {IonPage,IonCard,IonInput,IonImg} from '@ionic/vue'
+import {IonPage,IonHeader,IonToolbar,IonButtons,IonBackButton,IonTitle,IonContent,IonCard,IonLabel,IonInput,IonImg,IonItem,IonButton} from '@ionic/vue'
 
-export default {
+export default defineComponent({
+  props:['visit'],
   data () {
     return {
-      qrText: 'Jose Maria Alvarez Martinez',
+      qrText: '',
       qrSrc: null
+    
     }
   },
   
   components : {
-    IonPage,IonCard,IonInput,IonImg
+    IonPage,IonHeader,IonToolbar,IonButtons,IonBackButton,IonTitle,IonContent,IonCard,IonLabel,IonInput,IonImg,IonItem,IonButton
 
+  },
+  mounted(){
+    this.qrText = this.$route.params.visit
+    
   },
 
   methods: {
@@ -56,5 +79,5 @@ export default {
       this.qrText = ''
     }
   }
-}
+});
 </script>

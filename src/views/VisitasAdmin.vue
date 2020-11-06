@@ -13,13 +13,13 @@
       <div v-if="visits.length < 1">
         <p>No tienes registro de entradas</p>
       </div>
-      <ion-card v-for="(visit, index) in visits" :key="index" >
+      <ion-card v-for="(visit, index) in visits" :key="index">
         <ion-card-header>
-          <ion-card-title @click="VistaQr(visit.dataID)">{{ visit.data.name }} {{ visit.data.lastname }}</ion-card-title>
-          <ion-card-subtitle>{{ visit.data.plate }}</ion-card-subtitle>
+          <ion-card-title>{{ visit.name }} {{ visit.lastname }}</ion-card-title>
+          <ion-card-subtitle>{{ visit.plate }}</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          {{ visit.data.date }} - {{ visit.data.time }}
+          {{ visit.date }} - {{ visit.time }}
         </ion-card-content>
       </ion-card>
     </div>
@@ -34,17 +34,14 @@ import {
   IonCardContent,
   IonCardSubtitle,
   IonCardTitle,
-  IonCardHeader,
   IonHeader,
   IonToolbar,
   IonButtons,
   IonBackButton,
   IonTitle,
-  IonContent,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import firebase from 'firebase/app';
-import 'firebase/auth';
 import 'firebase/firestore';
 
 export default defineComponent({
@@ -54,56 +51,29 @@ export default defineComponent({
     IonCardContent,
     IonCardSubtitle,
     IonCardTitle,
-    IonCardHeader,
     IonHeader,
     IonToolbar,
     IonButtons,
     IonBackButton,
     IonTitle,
-    IonContent,
   },
   data() {
     return {
-      visits: [] as any[],
-      userId: '',
+      visits: [] as any[]
     };
   },
-  methods: {
-    VistaQr(uid: any){
-      //const visitante = "nombre bien perron";
-      console.log(uid)
-      //console.log(this.visits)
-    this.$router.push({name:'Generaqr', params:{visit: uid},  });
-
-  },
-
-  },
-  
   async created() {
-    await firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.userId = user.uid;
-      } else {
-        this.userId = '';
-      }
-    });
     try {
-      console.log(this.userId);
       const querySnapshot = await firebase
         .firestore()
         .collection('visits')
-        .where('userId', '==', this.userId)
         .get();
       querySnapshot.forEach((doc) => {
-        console.log(doc.id)
-        const dataID = doc.id
-        this.visits.push({data: doc.data(), dataID});
+        this.visits.push(doc.data());
       });
-      console.log(this.visits)
     } catch (error) {
       console.log(error);
     }
-
   },
 });
 </script>
