@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "VisitApp",
+  "appId": "com.suburbanaccess.app",
+  "appName": "Suburban Access",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist",

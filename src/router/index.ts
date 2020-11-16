@@ -7,7 +7,9 @@ import Bitacora from '../views/Bitacora.vue'
 import Generaqr from '../views/Generaqr.vue'
 import Admin from '../views/Admin.vue';
 import Register from '../views/Register.vue';
-import VisitasAdmin from '../views/VisitasAdmin.vue'
+import VisitasAdmin from '../views/VisitasAdmin.vue';
+import Scanner from '../views/Scanner.vue';
+import Visita from '../views/Visita.vue';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -63,6 +65,18 @@ const routes: Array<RouteRecordRaw> = [
     name: 'VisitasAdmin',
     component: VisitasAdmin,
     meta: {requiresAuth: true}
+  },
+  {
+    path: '/scanner',
+    name: 'Scanner',
+    component: Scanner,
+    meta: {requiresAuth: true}
+  },
+  {
+    path: '/visita/:visitId',
+    name: 'Visita',
+    component: Visita,
+    meta: {requiresAuth: true}
   }
 ]
 
@@ -74,25 +88,6 @@ const router = createRouter({
 router.beforeEach(async(to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const isAuthenticated = firebase.auth().currentUser;
-
-  // if((requiresAuth || requiresAdmin) && !isAuthenticated) {
-  //   next('/login');
-  // } else if(!requiresAuth && isAuthenticated) {
-  //   next('/home');
-  // } else if(requiresAdmin && isAuthenticated) {
-  //   next();
-  // } else if(requiresAdmin && isAuthenticated){
-  //   const querySnapshot = await firebase.firestore().collection('users_roles').where('userId', '==', isAuthenticated?.uid).get();
-  //   querySnapshot.forEach(doc => {
-  //     if(doc.data().role === 'admin') {
-  //       next();
-  //     } else {
-  //       next('/home');
-  //     }
-  //   });
-  // } else {
-  //   next();
-  // }
 
   if(requiresAuth && !isAuthenticated) {
     next('/login');

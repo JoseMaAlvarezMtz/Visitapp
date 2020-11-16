@@ -15,7 +15,7 @@
       </div>
       <ion-card v-for="(visit, index) in visits" :key="index" >
         <ion-card-header>
-          <ion-card-title @click="VistaQr(visit.dataID)">{{ visit.data.name }} {{ visit.data.lastname }}</ion-card-title>
+          <ion-card-title @click="VistaQr(visit.dataID, visit.data.type)">{{ visit.data.name }} {{ visit.data.lastname }}</ion-card-title>
           <ion-card-subtitle>{{ visit.data.plate }}</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
@@ -69,14 +69,9 @@ export default defineComponent({
     };
   },
   methods: {
-    VistaQr(uid: any){
-      //const visitante = "nombre bien perron";
-      console.log(uid)
-      //console.log(this.visits)
-    this.$router.push({name:'Generaqr', params:{visit: uid},  });
-
-  },
-
+    VistaQr(uid: any, type: any){
+      this.$router.push({name:'Generaqr', params:{visit: uid}, query:{type: type}});
+    }
   },
   
   async created() {
@@ -95,15 +90,12 @@ export default defineComponent({
         .where('userId', '==', this.userId)
         .get();
       querySnapshot.forEach((doc) => {
-        console.log(doc.id)
         const dataID = doc.id
         this.visits.push({data: doc.data(), dataID});
       });
-      console.log(this.visits)
     } catch (error) {
       console.log(error);
     }
-
   },
 });
 </script>
