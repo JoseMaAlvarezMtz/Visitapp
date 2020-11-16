@@ -17,6 +17,7 @@
       </ion-header>
     </ion-content>
     <div id="container">
+      <ion-title v-if="error" style="color: #db4141;">{{error}}</ion-title>
       <ion-card>
         <ion-item>
           <ion-label position="floating">Nombre</ion-label>
@@ -32,11 +33,14 @@
         </ion-item>
         <ion-item>
           <ion-label position="floating">Fecha de acceso</ion-label>
-          <ion-datetime display-format="YYYY-MM-DD"></ion-datetime>
+          <ion-datetime
+            display-format="YYYY-MM-DD"
+            v-model="date"
+          ></ion-datetime>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Hora de acceso</ion-label>
-          <ion-datetime display-format="HH-mm"></ion-datetime>
+          <ion-datetime display-format="HH-mm" v-model="time"></ion-datetime>
         </ion-item>
         <ion-button @click="newVisit">
           Registrar visita
@@ -60,7 +64,7 @@ import {
   IonButtons,
   IonInput,
   IonButton,
-  IonDatetime
+  IonDatetime,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import firebase from 'firebase/app';
@@ -82,7 +86,7 @@ export default defineComponent({
     IonButtons,
     IonInput,
     IonButton,
-    IonDatetime
+    IonDatetime,
   },
   data() {
     return {
@@ -91,12 +95,13 @@ export default defineComponent({
       plate: '',
       date: '',
       time: '',
-      userId: ''
+      userId: '',
+      error: ''
     };
   },
   created() {
-    firebase.auth().onAuthStateChanged(user => {
-      if(user) {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
         this.userId = user.uid;
       } else {
         this.userId = '';
@@ -106,25 +111,34 @@ export default defineComponent({
   methods: {
     Registro() {
       this.$router.push('NuevaVisita');
-    }, 
+    },
     async newVisit() {
-      // const visitData = {
-      //   name: this.name,
-      //   lastname: this.lastName,
-      //   plate: this.plate,
-      //   date: this.date,
-      //   time: this.time
-      // };
-      await firebase.firestore().collection('visits').doc().set({
-        name: this.name,
-        lastname: this.lastName,
-        plate: this.plate,
-        date: this.date,
-        time: this.time,
-        userId: this.userId
-      });
-      this.$router.push('Home');
-    }
+      if (
+        !this.name ||
+        !this.lastName ||
+        !this.plate ||
+        !this.date ||
+        !this.time
+      ) {
+        console.log('empty');
+        this.error = 'Por favor llena todos los campos';
+      } else {
+        await firebase
+          .firestore()
+          .collection('visits')
+          .doc()
+          .set({
+            name: this.name,
+            lastname: this.lastName,
+            plate: this.plate,
+            date: this.date,
+            time: this.time,
+            userId: this.userId,
+            type: 'entrada',
+          });
+        this.$router.push('Home');
+      }
+    },
   },
 });
 </script>

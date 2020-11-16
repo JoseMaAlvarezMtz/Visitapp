@@ -20,7 +20,7 @@
           <ion-label>Todas las entradas</ion-label>
         </ion-item>
 
-        <ion-item detail>
+        <ion-item detail @click="scanner">
           <ion-label>Escanear QR</ion-label>
         </ion-item>
 
@@ -56,6 +56,9 @@ export default defineComponent({
     },
     visitas() {
       this.$router.push('/visitas-admin');
+    },
+    scanner() {
+      this.$router.push({name: 'Scanner'});
     }
   }
 })
