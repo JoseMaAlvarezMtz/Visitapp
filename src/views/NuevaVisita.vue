@@ -17,7 +17,7 @@
       </ion-header>
     </ion-content>
     <div id="container">
-      <ion-title v-if="error" style="color: #db4141;">{{error}}</ion-title>
+      <ion-title v-if="error" style="color: #db4141;">{{ error }}</ion-title>
       <ion-card>
         <ion-item>
           <ion-label position="floating">Nombre</ion-label>
@@ -96,8 +96,18 @@ export default defineComponent({
       date: '',
       time: '',
       userId: '',
-      error: ''
+      error: '',
+      fecha: '',
+      hora: '',
+      fh: '',
     };
+  },
+  mounted() {
+    const date: Date = new Date();
+    const fecha =
+      date.getFullYear() + '-' + (1 + date.getMonth()) + '-' + date.getDate();
+    console.log(fecha);
+    console.log(date);
   },
   created() {
     firebase.auth().onAuthStateChanged((user) => {
@@ -107,6 +117,13 @@ export default defineComponent({
         this.userId = '';
       }
     });
+    const date: Date = new Date();
+    this.fecha =
+      date.getFullYear() + '-' + (1 + date.getMonth()) + '-' + date.getDate();
+    this.hora = (date.getHours() + ':' + date.getMinutes()).toString();
+
+    console.log(this.fecha);
+    console.log(this.hora);
   },
   methods: {
     Registro() {
@@ -123,20 +140,26 @@ export default defineComponent({
         console.log('empty');
         this.error = 'Por favor llena todos los campos';
       } else {
-        await firebase
-          .firestore()
-          .collection('visits')
-          .doc()
-          .set({
-            name: this.name,
-            lastname: this.lastName,
-            plate: this.plate,
-            date: this.date,
-            time: this.time,
-            userId: this.userId,
-            type: 'entrada',
-          });
-        this.$router.push('Home');
+        if (this.time >= this.fecha) {
+          console.log(this.time);
+          await firebase
+            .firestore()
+            .collection('visits')
+            .doc()
+            .set({
+              name: this.name,
+              lastname: this.lastName,
+              plate: this.plate,
+              date: this.date,
+              time: this.time,
+              userId: this.userId,
+              type: 'entrada',
+            });
+          this.$router.push('Home');
+        } else {
+          this.error =
+            'Fecha Invalida. Selecciona una fecha actual o posterior';
+        }
       }
     },
   },

@@ -76,7 +76,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/visita/:visitId',
     name: 'Visita',
     component: Visita,
-    meta: {requiresAuth: true}
+    // meta: {requiresAuth: true}
   }
 ]
 

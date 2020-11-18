@@ -61,7 +61,7 @@ export default defineComponent({
             const scanSub = QRScanner.scan().subscribe((text: string) => {
               const id = text.split('/')[0];
               const type = text.split('/')[1];
-              alert(text + ' ' + id + ' ' + type);
+              // alert(text + ' ' + id + ' ' + type);
               (window.document.querySelector(
                 'ion-app'
               ) as HTMLElement).style.opacity = '1';

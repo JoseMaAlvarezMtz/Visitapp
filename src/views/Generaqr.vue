@@ -15,7 +15,7 @@
           <ion-input
             v-model="qrText"
             @load="generateQrCode"
-            contenteditable="false"
+            readonly="true"
           >
           </ion-input>
         </ion-item>
