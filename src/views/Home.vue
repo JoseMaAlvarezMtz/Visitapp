@@ -5,7 +5,7 @@
         <ion-title>Suburban Access</ion-title>
       </ion-toolbar>
     </ion-header>
-    
+
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
@@ -18,22 +18,30 @@
         <ion-item v-on:click="Registro" detail>
           <ion-label>Registrar visita</ion-label>
         </ion-item>
-    
+
         <ion-item detail v-on:click="bitacora">
           <ion-label>Bitacora de entradas</ion-label>
         </ion-item>
 
         <ion-item detail v-on:click="logout">
           <ion-label>Cerrar sesión</ion-label>
-        </ion-item> 
+        </ion-item>
       </ion-list>
     </div>
-    
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonList, IonItem, IonLabel  } from '@ionic/vue';
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonList,
+  IonItem,
+  IonLabel,
+} from '@ionic/vue';
 import { defineComponent } from 'vue';
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -48,11 +56,11 @@ export default defineComponent({
     IonToolbar,
     IonList,
     IonItem,
-    IonLabel
+    IonLabel,
   },
-  methods:{
-    Registro(){
-      this.$router.push('NuevaVisita')
+  methods: {
+    Registro() {
+      this.$router.push('NuevaVisita');
     },
     bitacora() {
       this.$router.push('/bitacoras');
@@ -65,15 +73,14 @@ export default defineComponent({
         console.log(error);
       }
     }
-  }
-
+  },
 });
 </script>
 
 <style scoped>
 #container {
   text-align: center;
-  
+
   position: absolute;
   left: 0;
   right: 0;
@@ -89,9 +96,9 @@ export default defineComponent({
 #container p {
   font-size: 16px;
   line-height: 22px;
-  
+
   color: #8c8c8c;
-  
+
   margin: 0;
 }
 
