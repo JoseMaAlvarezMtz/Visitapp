@@ -78,7 +78,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Visita,
     meta: {requiresAuth: true}
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

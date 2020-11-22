@@ -43,8 +43,12 @@ import {
   IonLabel,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import {useBackButton, useIonRouter} from '@ionic/vue';
+import {Plugins} from '@capacitor/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+
+const {App} = Plugins;
 
 export default defineComponent({
   name: 'Home',
@@ -74,6 +78,14 @@ export default defineComponent({
       }
     }
   },
+  setup() {
+    const ionRouter = useIonRouter();
+    useBackButton(-1, () => {
+      if(!ionRouter.canGoBack()) {
+        App.exitApp();
+      }
+    });
+  }
 });
 </script>
 

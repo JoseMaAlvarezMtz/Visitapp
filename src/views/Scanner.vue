@@ -31,10 +31,11 @@ import {
   IonContent,
   IonFab,
   IonFabButton,
-  IonIcon
+  IonIcon,
 } from '@ionic/vue';
+import { useBackButton } from '@ionic/vue';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
-import {camera} from 'ionicons/icons';
+import { camera } from 'ionicons/icons';
 
 export default defineComponent({
   components: {
@@ -47,7 +48,7 @@ export default defineComponent({
     IonContent,
     IonFab,
     IonFabButton,
-    IonIcon
+    IonIcon,
   },
   methods: {
     scan() {
@@ -66,8 +67,18 @@ export default defineComponent({
                 'ion-app'
               ) as HTMLElement).style.opacity = '1';
               scanSub.unsubscribe();
-              this.$router.push({name: 'Visita', params: {visitId: id}, query: {type: type}});
+              this.$router.push({
+                name: 'Visita',
+                params: { visitId: id },
+                query: { type: type },
+              });
               QRScanner.hide();
+            });
+            useBackButton(0, () => {
+              (window.document.querySelector(
+                'ion-app'
+              ) as HTMLElement).style.opacity = '1';
+              scanSub.unsubscribe();
             });
           } else if (status.denied) {
             QRScanner.openSettings();
@@ -82,9 +93,9 @@ export default defineComponent({
   },
   setup() {
     return {
-      camera
-    }
-  }
+      camera,
+    };
+  },
 });
 </script>
 

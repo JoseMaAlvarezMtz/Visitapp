@@ -12,26 +12,44 @@
       <ion-card v-if="type == 'entrada'">
         <ion-item>
           <ion-label position="floating">Nombre</ion-label>
-          <ion-input :value="visit.name" @input="changeName($event)"></ion-input>
+          <ion-input
+            :value="visit.name"
+            @input="changeName($event)"
+          ></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Apellidos</ion-label>
-          <ion-input :value="visit.lastname" @input="changeLastName($event)"></ion-input>
+          <ion-input
+            :value="visit.lastname"
+            @input="changeLastName($event)"
+          ></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Placa</ion-label>
-          <ion-input :value="visit.plate" @input="changePlate($event)"></ion-input>
+          <ion-input
+            :value="visit.plate"
+            @input="changePlate($event)"
+          ></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Fecha de acceso</ion-label>
           <ion-datetime
             display-format="YYYY-MM-DD"
-            :value="visit.date" readonly="true"
+            :value="visit.date"
+            readonly="true"
           ></ion-datetime>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Hora de acceso</ion-label>
-          <ion-datetime display-format="HH-mm" :value="visit.time" readonly="true"></ion-datetime>
+          <ion-datetime
+            display-format="HH-mm"
+            :value="visit.time"
+            readonly="true"
+          ></ion-datetime>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Tipo de codigo QR</ion-label>
+          <ion-input :value="visit.type" readonly="true"></ion-input>
         </ion-item>
         <ion-button @click="updateValue">
           Editar valores
@@ -46,13 +64,18 @@
           <ion-card-subtitle>{{ visit.plate }}</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
-          {{ visit.date }} - {{ visit.time }}
+          {{ visit.date }} - {{ visit.time }} - tipo: {{ visit.type }}
         </ion-card-content>
         <ion-button @click="acceptExit">
           Aceptar salida
         </ion-button>
       </ion-card>
-      <ion-title style="text-align: center;">Tipo: {{ type }}</ion-title>
+      <ion-title style="text-align: center;"
+        >Tipo de codigo QR: {{ type }}</ion-title
+      >
+      <ion-button @click="goHome" v-if="visit.type !== type">
+        Ir a la pantalla principal
+      </ion-button>
     </ion-content>
   </ion-page>
 </template>
@@ -77,6 +100,7 @@ import {
   IonCardTitle,
   IonCardSubtitle,
   IonCardContent,
+  alertController,
 } from '@ionic/vue';
 import firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -108,8 +132,8 @@ export default defineComponent({
     IonCardSubtitle,
     IonCardContent,
   },
-  created() {
-    firebase
+  async created() {
+    await firebase
       .firestore()
       .collection('visits')
       .doc(this.id)
@@ -120,25 +144,81 @@ export default defineComponent({
       .catch((error) => {
         console.log(error);
       });
+    if (this.visit.type !== this.type) {
+      const alert = await alertController.create({
+        cssClass: 'my-custom-class',
+        header: 'Suburban Access',
+        subHeader: 'Alerta',
+        message:
+          'El tipo de visita es diferente al tipo de visita del codigo QR',
+        buttons: ['OK'],
+      });
+      alert.present();
+    }
   },
   methods: {
     async updateValue() {
-      console.log(this.visit.name, this.visit.lastname, this.visit.plate);
-      await firebase.firestore().collection('visits').doc(this.id).update({
-        name: this.visit.name,
-        lastname: this.visit.lastname,
-        plate: this.visit.plate
-      });
-      this.$router.go(0);
+      if (this.visit.type !== this.type) {
+        const alert = await alertController.create({
+          cssClass: 'my-custom-class',
+          header: 'Suburban Access',
+          subHeader: 'Alerta',
+          message:
+            'El tipo de visita es diferente al tipo de visita del codigo QR. No se puede editar los valores',
+          buttons: ['OK'],
+        });
+        alert.present();
+      } else {
+        await firebase
+          .firestore()
+          .collection('visits')
+          .doc(this.id)
+          .update({
+            name: this.visit.name,
+            lastname: this.visit.lastname,
+            plate: this.visit.plate,
+          });
+        this.$router.go(0);
+      }
     },
     async accept() {
-      console.log(this.visit);
-      await firebase.firestore().collection('visits').doc(this.id).update({
-        type: 'salida'
-      });
-      this.$router.push({name: 'Admin'});
+      if (this.visit.type !== this.type) {
+        const alert = await alertController.create({
+          cssClass: 'my-custom-class',
+          header: 'Suburban Access',
+          subHeader: 'Alerta',
+          message:
+            'El tipo de visita es diferente al tipo de visita del codigo QR. No puede aceptarse la entrada',
+          buttons: ['OK'],
+        });
+        alert.present();
+      } else {
+        await firebase
+          .firestore()
+          .collection('visits')
+          .doc(this.id)
+          .update({
+            type: 'salida',
+          });
+        this.$router.push({ name: 'Admin' });
+      }
     },
-    acceptExit() {
+    async acceptExit() {
+      if (this.visit.type !== this.type) {
+        const alert = await alertController.create({
+          cssClass: 'my-custom-class',
+          header: 'Suburban Access',
+          subHeader: 'Alerta',
+          message:
+            'El tipo de visita es diferente al tipo de visita del codigo QR. No puede aceptarse la salida',
+          buttons: ['OK'],
+        });
+        alert.present();
+      } else {
+        this.$router.push({ name: 'Admin' });
+      }
+    },
+    goHome() {
       this.$router.push({name: 'Admin'});
     },
     changeName(e) {
@@ -149,8 +229,8 @@ export default defineComponent({
     },
     changePlate(e) {
       this.visit.plate = e.target.value;
-    }
-  }
+    },
+  },
 });
 </script>
 
