@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, useBackButton} from '@ionic/vue';
+import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, useBackButton, useIonRouter} from '@ionic/vue';
 import {Plugins} from '@capacitor/core';
 import {defineComponent} from 'vue';
 import firebase from 'firebase/app';
@@ -65,8 +65,11 @@ export default defineComponent({
     }
   },
   setup() {
+    const ionRouter = useIonRouter();
     useBackButton(-1, () => {
-      App.exitApp();
+      if(!ionRouter.canGoBack()) {
+        App.exitApp();
+      }
     });
   }
 })
