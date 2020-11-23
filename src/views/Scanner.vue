@@ -3,7 +3,7 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button @click="hideScan"></ion-back-button>
+          <ion-back-button></ion-back-button>
         </ion-buttons>
         <ion-title>Registro de Visita</ion-title>
       </ion-toolbar>
@@ -66,6 +66,13 @@ export default defineComponent({
               (window.document.querySelector(
                 'ion-app'
               ) as HTMLElement).style.opacity = '1';
+              useBackButton(0, () => {
+                (window.document.querySelector(
+                  'ion-app'
+                ) as HTMLElement).style.opacity = '1';
+                scanSub.unsubscribe();
+                QRScanner.hide();
+              });
               scanSub.unsubscribe();
               this.$router.push({
                 name: 'Visita',
@@ -81,7 +88,6 @@ export default defineComponent({
               scanSub.unsubscribe();
               QRScanner.hide();
             });
-            this.hideScan(scanSub);
           } else if (status.denied) {
             QRScanner.openSettings();
           } else {
@@ -91,12 +97,6 @@ export default defineComponent({
         .catch((e: any) => {
           alert('El error es: ' + e);
         });
-    },
-    hideScan(scanSub: any) {
-      (window.document.querySelector('ion-app') as HTMLElement).style.opacity =
-        '1';
-      scanSub.unsubscribe();
-      QRScanner.hide();
     },
   },
   setup() {
