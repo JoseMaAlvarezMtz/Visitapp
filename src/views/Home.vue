@@ -43,7 +43,7 @@ import {
   IonLabel,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import {useBackButton, useIonRouter} from '@ionic/vue';
+import {useBackButton} from '@ionic/vue';
 import {Plugins} from '@capacitor/core';
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -79,11 +79,8 @@ export default defineComponent({
     }
   },
   setup() {
-    const ionRouter = useIonRouter();
     useBackButton(-1, () => {
-      if(!ionRouter.canGoBack()) {
-        App.exitApp();
-      }
+      App.exitApp();
     });
   }
 });

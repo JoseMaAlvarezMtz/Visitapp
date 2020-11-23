@@ -33,10 +33,13 @@
 </template>
 
 <script lang="ts">
-import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel} from '@ionic/vue';
+import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, useBackButton} from '@ionic/vue';
+import {Plugins} from '@capacitor/core';
 import {defineComponent} from 'vue';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+
+const {App} = Plugins;
 
 export default defineComponent({
   components: {
@@ -60,6 +63,11 @@ export default defineComponent({
     scanner() {
       this.$router.push({name: 'Scanner'});
     }
+  },
+  setup() {
+    useBackButton(-1, () => {
+      App.exitApp();
+    });
   }
 })
 </script>

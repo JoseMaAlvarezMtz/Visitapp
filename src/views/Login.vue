@@ -106,7 +106,16 @@ export default defineComponent({
         // await this.$router.push('Home');
       } catch (error) {
         const status = error;
-        return this.presentAlert(status);
+        console.log(status);
+        if(status.message.includes('The email address is badly formatted.')) {
+          return this.presentAlert('Incluya una dirección email valida.');
+        }
+        if(status.message.includes('There is no user record corresponding to this identifier. The user may have been deleted.') || status.message.includes('The password is invalid or the user does not have a password.')) {
+          return this.presentAlert('El usuario y/o la contraseña esta incorrecto.');
+        }
+        // if(status.message.includes('The password is invalid or the user does not have a password.')) {
+        //   return this.presentAlert('El usuario y/o la contraseña esta incorrecto.');
+        // }
       }
     },
     async presentAlert(Mensaje: any) {
