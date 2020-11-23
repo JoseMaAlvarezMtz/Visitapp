@@ -17,7 +17,9 @@
       </ion-header>
     </ion-content>
     <div id="container">
-      <ion-title v-if="error" style="color: #db4141;">{{ error }}</ion-title>
+      <ion-title v-if="error" style="color: #db4141;">
+        {{ error }}
+      </ion-title>
       <ion-card>
         <ion-item>
           <ion-label position="floating">Nombre</ion-label>
@@ -65,6 +67,7 @@ import {
   IonInput,
   IonButton,
   IonDatetime,
+  alertController,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import firebase from 'firebase/app';
@@ -102,13 +105,13 @@ export default defineComponent({
       fh: '',
     };
   },
-  mounted() {
-    const date: Date = new Date();
-    const fecha =
-      date.getFullYear() + '-' + (1 + date.getMonth()) + '-' + date.getDate();
-    console.log(fecha);
-    console.log(date);
-  },
+  // mounted() {
+  //   const date: Date = new Date();
+  //   const fecha =
+  //     date.getFullYear() + '-' + (1 + date.getMonth()) + '-' + date.getDate();
+  //   console.log(fecha);
+  //   console.log(date);
+  // },
   created() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -137,11 +140,37 @@ export default defineComponent({
         !this.date ||
         !this.time
       ) {
-        console.log('empty');
         this.error = 'Por favor llena todos los campos';
+        const alert = await alertController.create({
+          cssClass: 'my-custom-class',
+          header: 'Suburban Access',
+          subHeader: 'Alerta',
+          message: 'Por favor llena todos los campos',
+          buttons: ['OK'],
+        });
+        alert.present();
       } else {
-        if (this.time >= this.fecha) {
-          console.log(this.time);
+        if (this.time == undefined || this.date == undefined) {
+          const alert = await alertController.create({
+            cssClass: 'my-custom-class',
+            header: 'Suburban Access',
+            subHeader: 'Alerta',
+            message: 'Por favor llena todos los campos',
+            buttons: ['OK'],
+          });
+          return alert.present();
+        }
+        this.date = this.date.split('T')[0];
+        this.time = this.time.split('T')[1];
+        this.time = this.time.split(':')[0] + ':' + this.time.split(':')[1];
+        if (this.date >= this.fecha) {
+          // console.log(
+          //   'name: ' + this.name,
+          //   'lastname: ' + this.lastName,
+          //   'plate: ' + this.plate,
+          //   'fecha: ' + this.date,
+          //   'hora: ' + this.time
+          // );
           await firebase
             .firestore()
             .collection('visits')
@@ -159,6 +188,14 @@ export default defineComponent({
         } else {
           this.error =
             'Fecha Invalida. Selecciona una fecha actual o posterior';
+          const alert = await alertController.create({
+            cssClass: 'my-custom-class',
+            header: 'Suburban Access',
+            subHeader: 'Alerta',
+            message: 'Fecha Invalida. Selecciona una fecha actual o posterior',
+            buttons: ['OK'],
+          });
+          alert.present();
         }
       }
     },
