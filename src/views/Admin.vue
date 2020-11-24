@@ -33,9 +33,10 @@
 </template>
 
 <script lang="ts">
-import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, useBackButton, useIonRouter} from '@ionic/vue';
+import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel, useBackButton} from '@ionic/vue';
 import {Plugins} from '@capacitor/core';
 import {defineComponent} from 'vue';
+import {useRouter} from 'vue-router';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
@@ -65,12 +66,13 @@ export default defineComponent({
     }
   },
   setup() {
-    const ionRouter = useIonRouter();
+    const router = useRouter();
     useBackButton(-1, () => {
-      if(!ionRouter.canGoBack()) {
+      if(router.currentRoute.value.name == 'Admin') {
         App.exitApp();
       }
     });
+    // console.log(router.currentRoute.value.name);
   }
 })
 </script>
