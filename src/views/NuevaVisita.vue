@@ -98,7 +98,7 @@ export default defineComponent({
       plate: '',
       date: '',
       time: '',
-      userId: '',
+      userId: '' as any,
       error: '',
       fecha: '',
       hora: '',
@@ -113,13 +113,15 @@ export default defineComponent({
   //   console.log(date);
   // },
   created() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.userId = user.uid;
-      } else {
-        this.userId = '';
-      }
-    });
+    // firebase.auth().onAuthStateChanged((user) => {
+    //   if (user) {
+    //     this.userId = user.uid;
+    //   } else {
+    //     this.userId = '';
+    //   }
+    // });
+    this.userId = firebase.auth().currentUser?.uid;
+    console.log(this.userId);
     const date: Date = new Date();
     this.fecha =
       date.getFullYear() + '-' + (1 + date.getMonth()) + '-' + date.getDate();

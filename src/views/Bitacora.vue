@@ -75,19 +75,20 @@ export default defineComponent({
   },
   
   async created() {
-    await firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.userId = user.uid;
-      } else {
-        this.userId = '';
-      }
-    });
+    // await firebase.auth().onAuthStateChanged((user) => {
+    //   if (user) {
+    //     this.userId = user.uid;
+    //   } else {
+    //     this.userId = '';
+    //   }
+    // });
+    console.log(firebase.auth().currentUser?.uid);
     try {
-      console.log(this.userId);
+      // console.log(this.userId);
       const querySnapshot = await firebase
         .firestore()
         .collection('visits')
-        .where('userId', '==', this.userId)
+        .where('userId', '==', firebase.auth().currentUser?.uid)
         .get();
       querySnapshot.forEach((doc) => {
         const dataID = doc.id

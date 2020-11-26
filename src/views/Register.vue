@@ -58,6 +58,7 @@ import { defineComponent } from 'vue';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import admin from 'firebase-admin';
 
 export default defineComponent({
   data() {
@@ -87,29 +88,43 @@ export default defineComponent({
   },
   methods: {
     async registrar() {
-      await firebase
-        .auth()
-        .createUserWithEmailAndPassword(
-          this.registerUser.usuario,
-          this.registerUser.contra
-        );
-      firebase.auth().onAuthStateChanged(async(user) => {
-        if (user) {
-          this.userId = user.uid;
-          console.log(this.userId);
-          await firebase
-            .firestore()
-            .collection('users_roles')
-            .doc()
-            .set({
-              userId: this.userId,
-              role: this.role,
-            });
-          this.$router.push('/admin');
-        } else {
-          this.userId = '';
-        }
-      });
+      // await firebase
+      //   .auth()
+      //   .createUserWithEmailAndPassword(
+      //     this.registerUser.usuario,
+      //     this.registerUser.contra
+      //   );
+      // firebase.auth().onAuthStateChanged(async(user) => {
+      //   if (user) {
+      //     this.userId = user.uid;
+      //     console.log(this.userId);
+      //     await firebase
+      //       .firestore()
+      //       .collection('users_roles')
+      //       .doc()
+      //       .set({
+      //         userId: this.userId,
+      //         role: this.role,
+      //       });
+      //     this.$router.push('/admin');
+      //   } else {
+      //     this.userId = '';
+      //   }
+      // });
+      admin.auth().createUser({
+        email: this.registerUser.usuario,
+        password: this.registerUser.contra
+      })
+      .then(async(userRecord) => {
+        await firebase.firestore().collection('users_roles').doc().set({
+          userId: userRecord.uid,
+          role: this.role
+        });
+        this.$router.push('/admin');
+      })
+      .catch(error => {
+          console.log(error);
+      })
       this.registerUser.usuario = '';
       this.registerUser.contra = '';
     },

@@ -2,6 +2,8 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import firebase from 'firebase/app';
+import admin from 'firebase-admin';
+import serviceAccount from '../serviceAccountKey.json';
 
 import { IonicVue } from '@ionic/vue';
 
@@ -36,6 +38,11 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount as any),
+  databaseURL: "https://suburban-access-backend.firebaseio.com"
+});
 
 // let app = '' as any;
 

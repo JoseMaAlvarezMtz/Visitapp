@@ -1,20 +1,20 @@
 <template>
   <ion-page>
     <ion-card>
-    <img src="../../public/assets/icon/SA.png" />
+      <img src="../../public/assets/icon/SA.png" />
 
-    <ion-item>
-      <ion-label position="floating">User</ion-label>
-      <ion-input v-model="User.usuario" type="text"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating">Password</ion-label>
-      <ion-input v-model="User.contra" type="password"></ion-input>
-    </ion-item>
-    <ion-button v-on:click="IniciarSesion" expand="block"
-      >Iniciar sesion</ion-button
-    >
-  </ion-card>
+      <ion-item>
+        <ion-label position="floating">User</ion-label>
+        <ion-input v-model="User.usuario" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input v-model="User.contra" type="password"></ion-input>
+      </ion-item>
+      <ion-button v-on:click="IniciarSesion" expand="block"
+        >Iniciar sesion</ion-button
+      >
+    </ion-card>
   </ion-page>
 </template>
 
@@ -85,33 +85,56 @@ export default defineComponent({
         await firebase
           .auth()
           .signInWithEmailAndPassword(this.User.usuario, this.User.contra);
-        firebase.auth().onAuthStateChanged(async(user) => {
-          if (user) {
-            const querySnapshot = await firebase
-              .firestore()
-              .collection('users_roles')
-              .where('userId', '==', user.uid)
-              .get();
-            querySnapshot.forEach(doc => {
-              if(doc.data().role === 'admin') {
-                this.$router.push('Admin');
-              } else {
-                this.$router.push('Home');
-              }
-            });
+        console.log(firebase.auth().currentUser?.uid);
+        const querySnapshot = await firebase
+          .firestore()
+          .collection('users_roles')
+          .where('userId', '==', firebase.auth().currentUser?.uid)
+          .get();
+        querySnapshot.forEach(doc => {
+          console.log(doc.data());
+          if(doc.data().role === 'admin') {
+            this.$router.push('Admin');
+          } else {
+            this.$router.push('Home');
           }
         });
+        // firebase.auth().onAuthStateChanged(async(user) => {
+        //   if (user) {
+        //     const querySnapshot = await firebase
+        //       .firestore()
+        //       .collection('users_roles')
+        //       .where('userId', '==', user.uid)
+        //       .get();
+        //     querySnapshot.forEach(doc => {
+        //       if(doc.data().role === 'admin') {
+        //         this.$router.push('Admin');
+        //       } else {
+        //         this.$router.push('Home');
+        //       }
+        //     });
+        //   }
+        // });
         this.User.usuario = '';
         this.User.contra = '';
         // await this.$router.push('Home');
       } catch (error) {
         const status = error;
         console.log(status);
-        if(status.message.includes('The email address is badly formatted.')) {
+        if (status.message.includes('The email address is badly formatted.')) {
           return this.presentAlert('Incluya una dirección email valida.');
         }
-        if(status.message.includes('There is no user record corresponding to this identifier. The user may have been deleted.') || status.message.includes('The password is invalid or the user does not have a password.')) {
-          return this.presentAlert('El usuario y/o la contraseña esta incorrecto.');
+        if (
+          status.message.includes(
+            'There is no user record corresponding to this identifier. The user may have been deleted.'
+          ) ||
+          status.message.includes(
+            'The password is invalid or the user does not have a password.'
+          )
+        ) {
+          return this.presentAlert(
+            'El usuario y/o la contraseña esta incorrecto.'
+          );
         }
         // if(status.message.includes('The password is invalid or the user does not have a password.')) {
         //   return this.presentAlert('El usuario y/o la contraseña esta incorrecto.');
